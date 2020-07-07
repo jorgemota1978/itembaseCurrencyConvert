@@ -4,17 +4,22 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.itembase.currencyconvert.exchangerateapi.ExchangeRateApiList;
 import com.itembase.currencyconvert.model.dto.ConversionRequestDto;
 import com.itembase.currencyconvert.model.dto.ConvertionResponseDto;
+import com.itembase.currencyconvert.rest.ConversionController;
 
 import reactor.core.publisher.Mono;
 
 @Service("itembaseConversionService")
 public class ConversionService {
 
+	Logger log = LoggerFactory.getLogger(ConversionService.class);
+	
 	private final ExchangeRatesApiService exchangeRatesApiService;
 
 	private final ExchangeRateApiList exchangeRateApiList;
@@ -24,7 +29,8 @@ public class ConversionService {
 	}
 
 	public Mono<ConvertionResponseDto> convert(ConversionRequestDto conversionRequestDto) {
-
+		log.debug("convert");
+		
 		return exchangeRatesApiService.getRate(conversionRequestDto.getFrom(), 
 				conversionRequestDto.getTo(),
 				exchangeRateApiList.getListOfExchangeRateApi().stream().collect(Collectors.toList()))

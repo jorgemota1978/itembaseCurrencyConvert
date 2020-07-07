@@ -1,5 +1,7 @@
 package com.itembase.currencyconvert.rest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +21,8 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/currency")
 public class ConversionController {
 
+	Logger log = LoggerFactory.getLogger(ConversionController.class);
+	
 	private final ConversionService itembaseConversionService;
 	
 	public ConversionController(ConversionService itembaseConversionService) {
@@ -28,6 +32,10 @@ public class ConversionController {
 	@PostMapping(value = "/convert")
 	@ResponseStatus(HttpStatus.OK)
 	public Mono<ConvertionResponseDto> convert(@RequestBody ConversionRequestDto conversionRequestDto) {
-		return itembaseConversionService.convert(conversionRequestDto);
+		System.out.println("convert");
+		Mono<ConvertionResponseDto> res = itembaseConversionService.convert(conversionRequestDto);
+		System.out.println("Returning Mono<ConvertionResponseDto>");
+		
+		return res;
 	}
 }

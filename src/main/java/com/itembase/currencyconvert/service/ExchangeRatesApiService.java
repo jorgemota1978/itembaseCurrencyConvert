@@ -4,8 +4,11 @@ import java.security.SecureRandom;
 import java.util.List;
 import java.util.function.Function;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.itembase.currencyconvert.exceptions.NoRatesForGivenCurrencyException;
 import com.itembase.currencyconvert.exchangerateapi.IExchangeRateApi;
 
 import reactor.core.publisher.Mono;
@@ -13,6 +16,8 @@ import reactor.core.publisher.Mono;
 @Service
 public class ExchangeRatesApiService {
 
+	Logger log = LoggerFactory.getLogger(ExchangeRatesApiService.class);
+	
 	private SecureRandom random = new SecureRandom();
 	
 	public ExchangeRatesApiService() {
@@ -28,9 +33,11 @@ public class ExchangeRatesApiService {
 	 */
 	public Mono<Double> getRate(String fromCurrency, String toCurrency, 
 			List<IExchangeRateApi> exchangeRateApiList) {
+		log.debug("getRate");
+		
 		Integer sizeOfListOfExchangeRateApi = exchangeRateApiList.size();
 		if(sizeOfListOfExchangeRateApi <= 0) {
-			return Mono.empty();
+			return Mono.error(new NoRatesForGivenCurrencyException());
 		}
 		
 		// Index of the next ExchangeRateApi to call, choosen randomly
@@ -54,5 +61,10 @@ public class ExchangeRatesApiService {
 			return getRate(fromCurrency, toCurrency, exchangeRateApiList);
 		};
 	}
+
+	public void setRandom(SecureRandom random) {
+		this.random = random;
+	}
+	
 	
 }
