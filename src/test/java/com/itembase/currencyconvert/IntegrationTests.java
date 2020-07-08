@@ -64,9 +64,6 @@ public class IntegrationTests {
 			.body(monoReq, ConversionRequestDto.class)
 			.retrieve().bodyToMono(ConvertionResponseDto.class);
 		
-		ConvertionResponseDto res = new ConvertionResponseDto();
-		res.setError("There are issues with the provided request");
-				
 		StepVerifier.create(monoResp)
 			.assertNext(respFromWS -> {
 				assertEquals(req.getFrom(), respFromWS.getFrom());
@@ -90,9 +87,6 @@ public class IntegrationTests {
 			.body(monoReq, ConversionRequestDto.class)
 			.retrieve().bodyToMono(ConvertionResponseDto.class);
 		
-		ConvertionResponseDto res = new ConvertionResponseDto();
-		res.setError("There are issues with the provided request");
-				
 		StepVerifier.create(monoResp)
 			.verifyError();
 	}
