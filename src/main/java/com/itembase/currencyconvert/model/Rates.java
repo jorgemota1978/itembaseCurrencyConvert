@@ -12,6 +12,12 @@ public class Rates {
 
 	private Map<String, Double> rates;
 	
+	private String error;
+	
+	private String result;
+	
+	private String error_type;
+	
 	public String getBase() {
 		return base;
 	}
@@ -42,6 +48,30 @@ public class Rates {
 
 	public void setRates(Map<String, Double> rates) {
 		this.rates = rates;
+	}
+
+	public String getError() {
+		return error;
+	}
+
+	public void setError(String error) {
+		this.error = error;
+	}
+
+	public String getResult() {
+		return result;
+	}
+
+	public void setResult(String result) {
+		this.result = result;
+	}
+
+	public String getError_type() {
+		return error_type;
+	}
+
+	public void setError_type(String error_type) {
+		this.error_type = error_type;
 	}
 	
 	
