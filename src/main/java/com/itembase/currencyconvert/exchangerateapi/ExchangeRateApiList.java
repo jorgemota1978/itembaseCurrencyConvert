@@ -18,6 +18,10 @@ public class ExchangeRateApiList {
 	public List<IExchangeRateApi> getListOfExchangeRateApi() {
 		return listOfExchangeRateApi;
 	}
+
+	public void setListOfExchangeRateApi(List<IExchangeRateApi> listOfExchangeRateApi) {
+		this.listOfExchangeRateApi = listOfExchangeRateApi;
+	}
 	
 	
 

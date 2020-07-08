@@ -12,9 +12,9 @@ import reactor.core.publisher.Mono;
 public class ExchangeRateApiCOM implements IExchangeRateApi {
 	Logger log = LoggerFactory.getLogger(ExchangeRateApiCOM.class);
 	
-	private WebClient webClient = WebClient.create();
+	private WebClient webClient = WebClient.create("https://api.exchangerate-api.com");
 
-	private String baseURL = "https://api.exchangerate-api.com";
+	private String baseURL = "";
 	
 	public ExchangeRateApiCOM() {
 
@@ -36,6 +36,7 @@ public class ExchangeRateApiCOM implements IExchangeRateApi {
 	}
 
 	public void setBaseURL(String baseURL) {
+		webClient = WebClient.create();
 		this.baseURL = baseURL;
 	}
 	

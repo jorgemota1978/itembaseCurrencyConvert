@@ -13,9 +13,9 @@ public class ExchangeRateApiIO implements IExchangeRateApi {
 
 	Logger log = LoggerFactory.getLogger(ExchangeRateApiIO.class);
 	
-	private WebClient webClient = WebClient.create();
+	private WebClient webClient = WebClient.create("https://api.exchangeratesapi.io");
 
-	private String baseURL = "https://api.exchangeratesapi.io";
+	private String baseURL = "";
 	
 	public ExchangeRateApiIO() {
 
@@ -40,6 +40,7 @@ public class ExchangeRateApiIO implements IExchangeRateApi {
 	}
 
 	public void setBaseURL(String baseURL) {
+		webClient = WebClient.create();
 		this.baseURL = baseURL;
 	}
 

@@ -2,16 +2,13 @@ package com.itembase.currencyconvert.service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.itembase.currencyconvert.exchangerateapi.ExchangeRateApiList;
 import com.itembase.currencyconvert.model.dto.ConversionRequestDto;
 import com.itembase.currencyconvert.model.dto.ConvertionResponseDto;
-import com.itembase.currencyconvert.rest.ConversionController;
 
 import reactor.core.publisher.Mono;
 
@@ -22,18 +19,21 @@ public class ConversionService {
 	
 	private final ExchangeRatesApiService exchangeRatesApiService;
 
-	private final ExchangeRateApiList exchangeRateApiList;
-	public ConversionService(ExchangeRatesApiService exchangeRatesApiService, ExchangeRateApiList exchangeRateApiList) {
+	public ConversionService(ExchangeRatesApiService exchangeRatesApiService) {
 		this.exchangeRatesApiService = exchangeRatesApiService;
-		this.exchangeRateApiList = exchangeRateApiList;
 	}
 
 	public Mono<ConvertionResponseDto> convert(ConversionRequestDto conversionRequestDto) {
-		log.debug("convert");
+		if(conversionRequestDto == null
+				|| conversionRequestDto.getFrom() == null || conversionRequestDto.getFrom().trim().isEmpty()
+				|| conversionRequestDto.getTo() == null || conversionRequestDto.getTo().trim().isEmpty()
+				|| conversionRequestDto.getAmount() == null) {
+			ConvertionResponseDto res = new ConvertionResponseDto();
+			res.setError("There are issues with the provided request");
+			return Mono.just(res);
+		}
 		
-		return exchangeRatesApiService.getRate(conversionRequestDto.getFrom(), 
-				conversionRequestDto.getTo(),
-				exchangeRateApiList.getListOfExchangeRateApi().stream().collect(Collectors.toList()))
+		return exchangeRatesApiService.getRate(conversionRequestDto.getFrom(), conversionRequestDto.getTo())
 				.flatMap(rate -> {
 					ConvertionResponseDto res = new ConvertionResponseDto();
 					res.setAmount(conversionRequestDto.getAmount());
@@ -48,18 +48,8 @@ public class ConversionService {
 					return Mono.just(res);
 
 				})
-				.switchIfEmpty(getErrorMonoConvertionResponseDto(conversionRequestDto))
 				.log();
 
 	}
 	
-	public Mono<ConvertionResponseDto> getErrorMonoConvertionResponseDto(ConversionRequestDto conversionRequestDto){
-		ConvertionResponseDto res = new ConvertionResponseDto();
-		res.setAmount(conversionRequestDto.getAmount());
-		res.setFrom(conversionRequestDto.getFrom());
-		res.setTo(conversionRequestDto.getTo());
-		res.setError("No providers available");
-		
-		return Mono.just(res);
-	}
 }

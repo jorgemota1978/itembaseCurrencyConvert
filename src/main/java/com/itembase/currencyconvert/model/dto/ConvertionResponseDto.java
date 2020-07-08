@@ -56,6 +56,5 @@ public class ConvertionResponseDto {
 	public void setError(String error) {
 		this.error = error;
 	}
-	
-	
+
 }

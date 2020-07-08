@@ -32,10 +32,6 @@ public class ConversionController {
 	@PostMapping(value = "/convert")
 	@ResponseStatus(HttpStatus.OK)
 	public Mono<ConvertionResponseDto> convert(@RequestBody ConversionRequestDto conversionRequestDto) {
-		System.out.println("convert");
-		Mono<ConvertionResponseDto> res = itembaseConversionService.convert(conversionRequestDto);
-		System.out.println("Returning Mono<ConvertionResponseDto>");
-		
-		return res;
+		return itembaseConversionService.convert(conversionRequestDto);
 	}
 }
