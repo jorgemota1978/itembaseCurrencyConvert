@@ -1,11 +1,11 @@
 # Itembase Currency Convert
 
-#### How to download the application
+### How to download the application
 
 Use the following command to clone the application:
   - git clone https://github.com/jorgemota1978/itembaseCurrencyConvert.git
   
-#### How to run the application
+### How to run the application
 
 There are different ways to run the application:
 
@@ -19,11 +19,11 @@ With the above command the application starts on port 8080, if you want to run o
 **Maven**
   1. In the root folder of the application, itembaseCurrencyConvert/, run: mvn spring-boot:run
   
-#### How to send requests
+### How to send requests
 
 You can send requests via Swagger. Please access: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
 
-#### How is the application designed
+### How is the application designed
 
 When sending a request to /currency/convert a Mono<ConvertionResponseDto> is returned with the converted value or with a error explaining what was the problem.
 
@@ -36,7 +36,7 @@ Below is a small explanation of each component:
     - ExchangeRateApiIO: Provider client for https://api.exchangeratesapi.io
     - ExchangeRateApiCOM: Provider client for https://api.exchangerate-api.com
     
-#### Tests
+### Tests
 
 Below is a small explanation of each test class developed:
   - ExchangeRateApisTests: Unit tests on the providers using MockWebServer to simulate responses;
@@ -44,7 +44,7 @@ Below is a small explanation of each test class developed:
   - ConversionServiceTests: Unit tests on ConversionService using Mockito to mock ExchangeRatesApiService;
   - IntegrationTests: This runnable class start a spring boot and does real end to end tests (This class does not run when running maven);
   
-#### Improvements
+### Improvements
 
 caching
 authentication
