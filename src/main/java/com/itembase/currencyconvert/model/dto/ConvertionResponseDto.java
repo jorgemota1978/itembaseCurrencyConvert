@@ -5,10 +5,13 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 public class ConvertionResponseDto {
 
+	@JsonInclude(value = Include.NON_NULL)
 	private String from;
 	
+	@JsonInclude(value = Include.NON_NULL)
 	private String to;
-	
+		
+	@JsonInclude(value = Include.NON_NULL)
 	private Double amount;
 
 	@JsonInclude(value = Include.NON_NULL)

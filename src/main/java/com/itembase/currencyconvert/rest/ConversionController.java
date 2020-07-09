@@ -2,7 +2,6 @@ package com.itembase.currencyconvert.rest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,10 +32,8 @@ public class ConversionController {
 	@PostMapping(value = "/convert")
 	@ResponseStatus(HttpStatus.OK)
 	public Mono<ConvertionResponseDto> convert(@RequestBody ConversionRequestDto conversionRequestDto) {
-		long time = System.currentTimeMillis();
-		Mono<ConvertionResponseDto> resp = itembaseConversionService.convert(conversionRequestDto);
-		time = System.currentTimeMillis() - time;
-		System.out.println("time execution: " + time + "ms");
-		return resp;
+	
+		return itembaseConversionService.convert(conversionRequestDto);
 	}
+	
 }

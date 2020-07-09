@@ -1,6 +1,7 @@
 package com.itembase.currencyconvert;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
@@ -75,4 +76,26 @@ public class ExchangeRatesApiServiceTests {
 		Mono<Double> monoDouble = exchangeRatesApiService.getRate("EEE", "WWW");
 		StepVerifier.create(monoDouble).expectNext(0.9).verifyComplete();
 	}
+	
+	
+	@Test
+	public void test2ProvidersFailingUnknownHostException() {
+		Mockito.when(exchangeRateApiIO.getRate("EEE", "WWW")).thenReturn(Mono.error(new UnknownHostException("UnknownHostException")));
+		Mockito.when(exchangeRateApiCOM.getRate("EEE", "WWW")).thenReturn(Mono.error(new UnknownHostException("UnknownHostException")));
+		
+		Mono<Double> monoDouble = exchangeRatesApiService.getRate("EEE", "WWW");
+		StepVerifier.create(monoDouble).verifyErrorMessage("There are no providers available");
+	}
+	
+	@Test
+	public void testFirstProviderFailingUnknownHostException() {
+		Mockito.when(random.nextInt(2)).thenReturn(0);
+		Mockito.when(exchangeRateApiIO.getRate("EEE", "WWW")).thenReturn(Mono.error(new UnknownHostException("UnknownHostException")));
+		Mockito.when(random.nextInt(1)).thenReturn(0);
+		Mockito.when(exchangeRateApiCOM.getRate("EEE", "WWW")).thenReturn(Mono.just(1.3));
+		
+		Mono<Double> monoDouble = exchangeRatesApiService.getRate("EEE", "WWW");
+		StepVerifier.create(monoDouble).expectNext(1.3).verifyComplete();
+	}
+	
 }

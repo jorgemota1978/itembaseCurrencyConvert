@@ -1,5 +1,6 @@
 package com.itembase.currencyconvert.service;
 
+import java.net.UnknownHostException;
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.function.Function;
@@ -39,13 +40,19 @@ public class ExchangeRatesApiService {
 	public Mono<Double> getRate(String fromCurrency, String toCurrency) {
 				
 		return getRatePrivate(fromCurrency, toCurrency, 
-				exchangeRateApiList.getListOfExchangeRateApi().stream().collect(Collectors.toList()));
+				exchangeRateApiList.getListOfExchangeRateApi().stream().collect(Collectors.toList()),
+				exchangeRateApiList.getListOfExchangeRateApi().size(), 0);
 	}
 	
 	private Mono<Double> getRatePrivate(String fromCurrency, String toCurrency,
-			List<IExchangeRateApi> listOfExchangeRateApi) {
+			List<IExchangeRateApi> listOfExchangeRateApi, 
+			Integer initialSize, Integer unavailableProviders) {
+		
 		Integer sizeOfListOfExchangeRateApi = listOfExchangeRateApi.size();
 		if(sizeOfListOfExchangeRateApi <= 0) {
+			if(initialSize == unavailableProviders) {
+				return Mono.error(new NoRatesForGivenCurrencyException("There are no providers available"));
+			}
 			return Mono.error(new NoRatesForGivenCurrencyException("None of the providers returned a satisfactory response"));
 		}
 		
@@ -60,14 +67,22 @@ public class ExchangeRatesApiService {
 		listOfExchangeRateApi.remove(exchangeRateApi);
 		
 		return exchangeRateApi.getRate(fromCurrency, toCurrency)
-				.onErrorResume(functionFallback(fromCurrency, toCurrency, listOfExchangeRateApi));
+				.onErrorResume(functionFallback(fromCurrency, toCurrency, listOfExchangeRateApi,
+						initialSize, unavailableProviders));
 	}
 	
 	private Function<Throwable, Mono<Double>> functionFallback(String fromCurrency, String toCurrency,
-			List<IExchangeRateApi> exchangeRateApiList){
+			List<IExchangeRateApi> exchangeRateApiList, Integer initialSize, 
+			final Integer unavailableProviders){
 		return c -> {
 			
-			return getRatePrivate(fromCurrency, toCurrency, exchangeRateApiList);
+			
+			Integer unavailableProvidersTmp = unavailableProviders;
+			if(c instanceof UnknownHostException) {
+				unavailableProvidersTmp++;
+			}
+			
+			return getRatePrivate(fromCurrency, toCurrency, exchangeRateApiList, initialSize, unavailableProvidersTmp);
 		};
 	}
 

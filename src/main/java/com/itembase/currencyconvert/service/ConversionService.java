@@ -2,6 +2,7 @@ package com.itembase.currencyconvert.service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.function.Function;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,15 +49,18 @@ public class ConversionService {
 					return Mono.just(res);
 
 				})
-				//.onErrorReturn(buildErrorResponse())
+				.onErrorResume(onErrorResume())
 				.log();
 
 	}
 	
-	private ConvertionResponseDto buildErrorResponse() {
-		ConvertionResponseDto res = new ConvertionResponseDto();
-		res.setError("There was an error with your request");
-		
-		return res;
+
+	public Function<Throwable, Mono<ConvertionResponseDto>> onErrorResume(){
+		return t -> {
+			ConvertionResponseDto respError = new ConvertionResponseDto();
+			respError.setError(t.getMessage());
+			
+			return Mono.just(respError);
+		};
 	}
 }

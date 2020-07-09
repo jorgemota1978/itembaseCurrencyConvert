@@ -88,7 +88,15 @@ public class IntegrationTests {
 			.retrieve().bodyToMono(ConvertionResponseDto.class);
 		
 		StepVerifier.create(monoResp)
-			.verifyError();
+		.assertNext(respFromWS -> {
+			assertNull(respFromWS.getFrom());
+			assertNull(respFromWS.getTo());
+			assertNull(respFromWS.getAmount());
+			assertNull(respFromWS.getConverted());
+			
+			assertEquals("None of the providers returned a satisfactory response", respFromWS.getError());
+		})
+		.verifyComplete();
 	}
 	
 }

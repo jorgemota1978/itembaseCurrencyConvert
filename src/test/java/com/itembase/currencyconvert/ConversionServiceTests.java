@@ -74,7 +74,15 @@ public class ConversionServiceTests {
 		
 		Mono<ConvertionResponseDto> monoResp = itembaseConversionService.convert(req);
 		StepVerifier.create(monoResp)
-			.verifyErrorMessage("None of the providers returned a satisfactory response");
+			.assertNext(respFromWS -> {
+				assertNull(respFromWS.getFrom());
+				assertNull(respFromWS.getTo());
+				assertNull(respFromWS.getAmount());
+				assertNull(respFromWS.getConverted());
+				
+				assertEquals("None of the providers returned a satisfactory response", respFromWS.getError());
+			})
+			.verifyComplete();
 	}
 
 }
