@@ -48,7 +48,7 @@ public class ConversionService {
 					return Mono.just(res);
 
 				})
-				.onErrorReturn(buildErrorResponse())
+				//.onErrorReturn(buildErrorResponse())
 				.log();
 
 	}
