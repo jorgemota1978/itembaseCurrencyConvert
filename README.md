@@ -21,7 +21,9 @@ With the above command the application starts on port 8080, if you want to run o
   
 ### How to send requests
 
-You can send requests via Swagger. Please access: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+1. You can send requests via Swagger. Please access: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+2. You can send requests in Java, please see examples in class IntegrationTests
+3. With curl command, example: curl -d '{"from":"EUR", "to":"USD", "amount":200.04}' -H "Content-Type: application/json" -X POST http://localhost:8080/currency/convert
 
 ### How is the application designed
 
@@ -46,5 +48,23 @@ Below is a small explanation of each test class developed:
   
 ### Improvements
 
-caching
-authentication
+Here are some improvements that can be done to the application:
+1. Caching of provider responses
+2. Caching of the endpoint responses: We can use annotation @EnableCaching to enable caching of our responses on the Rest controller;
+3. Tests on performance with parallel requests: Further testing would be needed, for example to see how the application behaves in terms of performance. 
+4. Authentication of endpoint /currency/convert: We can use spring-security to add authentication to our endpoint;
+
+**Authentication to providers** - If the providers need authentication we can use the following:
+```
+private WebClient client = WebClient.builder()
+            .defaultHeaders(header -> header.setBasicAuth(userName, password))
+            .build();
+```
+or
+```
+            Mono<String> response = client.get()
+                    .url("/customers")
+                    .headers(headers -> headers.setBasicAuth(userName, password))
+                    .retrieve()
+                    .bodyToFlux(String.class);
+```
