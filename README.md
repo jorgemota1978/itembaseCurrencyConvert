@@ -56,15 +56,29 @@ Here are some improvements that can be done to the application:
 
 **Authentication to providers** - If the providers need authentication we can use the following:
 ```
-private WebClient client = WebClient.builder()
-            .defaultHeaders(header -> header.setBasicAuth(userName, password))
-            .build();
+	private WebClient client = WebClient.builder()
+            	.defaultHeaders(header -> header.setBasicAuth(userName, password))
+            	.build();
 ```
 or
 ```
-            Mono<String> response = client.get()
-                    .url("/customers")
-                    .headers(headers -> headers.setBasicAuth(userName, password))
-                    .retrieve()
-                    .bodyToFlux(String.class);
+	Mono<String> response = client.get()
+            	.url("/customers")
+            	.headers(headers -> headers.setBasicAuth(userName, password))
+            	.retrieve()
+            	.bodyToFlux(String.class);
 ```
+or if we need to authenticate with SSL client side:
+```
+	SslContext sslContext = SslContextBuilder
+            	.forClient()
+            	.trustManager(InsecureTrustManagerFactory.INSTANCE)
+            	.build();
+	ClientHttpConnector httpConnector = HttpClient.create().secure(t -> t.sslContext(sslContext) )
+	return WebClient.builder().clientConnector(httpConnector).build();
+```
+
+**Caching of provider responses** - To improve performance we can cache the provider responses with:
+- Spring CacheManager
+- Mono.cache
+- 
