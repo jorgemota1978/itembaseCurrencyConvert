@@ -81,4 +81,4 @@ or if we need to authenticate with SSL client side:
 **Caching of provider responses** - To improve performance we can cache the provider responses with:
 - Spring CacheManager
 - Mono.cache
-- 
+- Redis
