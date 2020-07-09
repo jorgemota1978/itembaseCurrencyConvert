@@ -2,6 +2,9 @@ package com.itembase.currencyconvert.exchangerateapi;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.Cache.ValueWrapper;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.itembase.currencyconvert.exceptions.NoRatesForGivenCurrencyException;
@@ -26,18 +29,21 @@ public class ExchangeRateApiCOM implements IExchangeRateApi {
 			return Mono.error(new NoRatesForGivenCurrencyException("FromCurrency and/or toCurrency are null"));
 		}
 		
-		return this.webClient.get().uri(uriBuilder -> 
-			uriBuilder.path(baseURL + "/v4/latest/" + fromCurrency)
-			.build())
-				.retrieve()
-				.bodyToMono(Rates.class)
-				.flatMap(ExchangeRateApiIOCOMCommon.functionGetRate(fromCurrency, toCurrency))
-				.log();
+			return this.webClient.get().uri(uriBuilder -> 
+				uriBuilder.path(baseURL + "/v4/latest/" + fromCurrency)
+				.build())
+					.retrieve()
+					.bodyToMono(Rates.class)
+					.flatMap(ExchangeRateApiIOCOMCommon.functionGetRate(fromCurrency, toCurrency))
+					.log();
+		
 	}
 
 	public void setBaseURL(String baseURL) {
 		webClient = WebClient.create();
 		this.baseURL = baseURL;
+		
+		
 	}
 	
 	

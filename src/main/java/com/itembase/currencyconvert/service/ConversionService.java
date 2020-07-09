@@ -48,8 +48,15 @@ public class ConversionService {
 					return Mono.just(res);
 
 				})
+				.onErrorReturn(buildErrorResponse())
 				.log();
 
 	}
 	
+	private ConvertionResponseDto buildErrorResponse() {
+		ConvertionResponseDto res = new ConvertionResponseDto();
+		res.setError("There was an error with your request");
+		
+		return res;
+	}
 }
