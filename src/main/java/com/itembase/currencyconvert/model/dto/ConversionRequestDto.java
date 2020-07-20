@@ -31,6 +31,11 @@ public class ConversionRequestDto {
 	public void setAmount(Double amount) {
 		this.amount = amount;
 	}
+
+	@Override
+	public String toString() {
+		return "ConversionRequestDto [from=" + from + ", to=" + to + ", amount=" + amount + "]";
+	}
 	
 	
 

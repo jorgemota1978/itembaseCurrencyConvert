@@ -21,7 +21,7 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/currency")
 public class ConversionController {
 
-	Logger log = LoggerFactory.getLogger(ConversionController.class);
+	private static Logger log = LoggerFactory.getLogger(ConversionController.class);
 	
 	private final ConversionService itembaseConversionService;
 	
@@ -32,7 +32,8 @@ public class ConversionController {
 	@PostMapping(value = "/convert")
 	@ResponseStatus(HttpStatus.OK)
 	public Mono<ConvertionResponseDto> convert(@RequestBody ConversionRequestDto conversionRequestDto) {
-	
+		
+		log.info("convert --> " + conversionRequestDto);
 		return itembaseConversionService.convert(conversionRequestDto);
 	}
 	
