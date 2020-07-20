@@ -2,9 +2,6 @@ package com.itembase.currencyconvert.exchangerateapi;
 
 import java.util.function.Function;
 
-import org.springframework.cache.CacheManager;
-import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
-
 import com.itembase.currencyconvert.exceptions.NoRatesForGivenCurrencyException;
 import com.itembase.currencyconvert.model.Rates;
 

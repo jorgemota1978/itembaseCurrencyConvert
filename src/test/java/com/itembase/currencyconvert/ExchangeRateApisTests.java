@@ -1,20 +1,17 @@
 package com.itembase.currencyconvert;
 
 import java.io.IOException;
-import java.net.ConnectException;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.itembase.currencyconvert.exceptions.NoRatesForGivenCurrencyException;
 import com.itembase.currencyconvert.exchangerateapi.ExchangeRateApiCOM;
 import com.itembase.currencyconvert.exchangerateapi.ExchangeRateApiIO;
 import com.itembase.currencyconvert.model.Rates;

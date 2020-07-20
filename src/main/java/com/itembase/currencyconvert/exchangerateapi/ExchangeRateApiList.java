@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ExchangeRateApiList {
 
-	private List<IExchangeRateApi> listOfExchangeRateApi = new ArrayList();
+	private List<IExchangeRateApi> listOfExchangeRateApi = new ArrayList<IExchangeRateApi>();
 	
 	{
 		listOfExchangeRateApi.add(new ExchangeRateApiIO());
